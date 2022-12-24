@@ -23,13 +23,13 @@
 	let canvas: HTMLCanvasElement;
 	let container: HTMLElement;
 
-	let scene: THREE.Scene;
+	let scenes: { [scene: string]: THREE.Scene } = {};
 	let camera: THREE.PerspectiveCamera;
 
 	const fov = 45;
 
 	onMount(() => {
-		renderer = new THREE.WebGLRenderer();
+		renderer = new THREE.WebGLRenderer({ preserveDrawingBuffer: true });
 		renderer.setSize($width, $height);
 		container.appendChild(renderer.domElement);
 
@@ -41,10 +41,8 @@
 
 		handleResize();
 
-		scene = new THREE.Scene();
 		canvas = renderer.domElement;
 
-		sceneStore.set(scene);
 		canvasStore.set(canvas);
 
 		let keys = Object.keys(listeners).sort();
@@ -52,6 +50,10 @@
 		// setup entities
 		for (let key of keys) {
 			let lis = listeners[key];
+			let scene = new THREE.Scene();
+			scenes[key] = scene;
+			sceneStore.set(scene);
+
 			lis!.forEach(async (entity) => {
 				if (entity.setup) {
 					let p = entity.setup($props);
@@ -101,6 +103,8 @@
 	}
 
 	function render(dt: number) {
+		let scene = scenes[$state];
+
 		sceneStore.set(scene);
 		cameraStore.set(camera);
 

@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { add_renderer, state } from './game_state';
+	import { add_renderer, state, prev_canvas } from './game_state';
 	import * as THREE from 'three';
 	import { CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 
-	const time_limit = 61;
+	const time_limit = 60;
 	const time_labels: CSS2DObject[] = [];
 
 	let end_time: number;
@@ -49,7 +49,7 @@
 			});
 		},
 		render(props, dt) {
-			const { camera } = props;
+			const { canvas, camera } = props;
 
 			if (!end_time) {
 				end_time = performance.now() + time_limit * 1000;
@@ -72,6 +72,11 @@
 			}
 
 			if (time_remaining <= 0) {
+				let data = canvas!.toDataURL('image/jpeg', 1.0);
+				let loader = new THREE.TextureLoader();
+				let texture = loader.load(data);
+
+				prev_canvas.set(texture);
 				state.set('3');
 			}
 		}

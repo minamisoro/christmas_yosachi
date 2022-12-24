@@ -85,7 +85,6 @@
 			for (let [i, item] of items!.entries()) {
 				item.model.rotateX(dt * 0.001);
 				item.model.rotateY(dt * 0.001);
-				item.model.rotateZ(dt * 0.001);
 
 				if (!item.model.visible && !revive[i]) {
 					revive[i] = now + 5000 + Math.random() * 5000;

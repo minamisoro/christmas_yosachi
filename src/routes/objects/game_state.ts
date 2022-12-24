@@ -6,13 +6,15 @@ export const width = writable(500);
 export const height = writable(500);
 export const time = writable(0);
 export const orig_camera_pos_z = writable(0);
-export const state = writable("2");
+export const state = writable("1");
 
 export const canvas: Writable<HTMLCanvasElement> = writable();
+export const prev_canvas: Writable<THREE.Texture> = writable();
 export const scene: Writable<THREE.Scene> = writable();
 export const camera: Writable<THREE.PerspectiveCamera> = writable();
 export const bumpers: Writable<THREE.Mesh[]> = writable([]);
 export const items: Writable<{ model: THREE.Group, type: number }[]> = writable([]);
+export const collected: Writable<number[]> = writable([]);
 
 export class GameProps {
     width?: number;
@@ -23,11 +25,12 @@ export class GameProps {
     camera?: THREE.PerspectiveCamera;
     bumpers?: THREE.Mesh[];
     items?: { model: THREE.Group, type: number }[];
+    collected?: number[];
     orig_camera_pos_z?: number;
 }
 
 export const props: Readable<GameProps> = derived([
-    width, height, time, canvas, scene, camera, bumpers, items, orig_camera_pos_z
+    width, height, time, canvas, scene, camera, bumpers, items, collected, orig_camera_pos_z
 ], (arr) => {
     return {
         width: arr[0],
@@ -38,7 +41,8 @@ export const props: Readable<GameProps> = derived([
         camera: arr[5],
         bumpers: arr[6],
         items: arr[7],
-        orig_camera_pos_z: arr[8]
+        collected: arr[8],
+        orig_camera_pos_z: arr[9]
     }
 })
 

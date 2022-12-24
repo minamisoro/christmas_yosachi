@@ -242,7 +242,7 @@
 					velocity = new_unit_vector
 						.clone()
 						.multiplyScalar(velocity.length() - distance_traveled)
-						.add(bumper_boost);
+						.add(bumper_boost.multiplyScalar(radius / original_radius));
 
 					reflected = true;
 				}
@@ -405,6 +405,10 @@
 		}
 
 		if (!setup_complete) {
+			return;
+		}
+
+		if (key_pressed[event.key].length !== key_released[event.key].length + 1) {
 			return;
 		}
 
